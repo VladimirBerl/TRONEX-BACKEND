@@ -14,27 +14,38 @@ module.exports = {
       },
       investment_balance: {
         type: Sequelize.DECIMAL(30, 18),
+        allowNull: false,
         defaultValue: 1.0,
       },
       farm_balance: {
         type: Sequelize.DECIMAL(30, 18),
+        allowNull: false,
         defaultValue: 0.0,
+      },
+      farm_balance_reset_at: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
+        allowNull: false,
       },
       level: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         defaultValue: 0,
       },
       clicks_today: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         defaultValue: 0,
       },
-      clicks_total: {
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
+      clicks_today_reset_at: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
+        allowNull: false,
       },
       bonus_locked: {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
