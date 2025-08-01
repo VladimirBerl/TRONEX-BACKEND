@@ -1,6 +1,7 @@
 import { DataTypes, Sequelize } from 'sequelize';
 
 import defineUserModel from './models/user';
+import defineLevelModel from './models/level';
 
 const sequelize = new Sequelize(process.env.NITRO_DATABASE_URL, {
   dialect: 'postgres',
@@ -18,6 +19,7 @@ const db = async (): Promise<Sequelize> => {
 
 const models = {
   User: defineUserModel(sequelize, DataTypes),
+  Level: defineLevelModel(sequelize, DataTypes),
 };
 
 export { db, models };

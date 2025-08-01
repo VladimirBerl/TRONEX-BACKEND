@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
   const user = await models.User.findByPk(id_tg);
 
   if (!user) {
-    return useApiError(event, 'not-found');
+    return useApiError(event, 'not-found-user');
   }
 
   const now = new Date();

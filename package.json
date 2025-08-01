@@ -5,7 +5,8 @@
     "dev": "nitro dev",
     "prepare": "nitro prepare",
     "preview": "node .output/server/index.mjs",
-    "migrate": "sequelize-cli db:migrate"
+    "migrate": "sequelize-cli db:migrate",
+    "seeds": "sequelize-cli db:seed:all"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",

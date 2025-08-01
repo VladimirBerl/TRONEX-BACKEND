@@ -18,13 +18,5 @@ export default defineEventHandler(async (event) => {
 
   await updataFarmBalanceOneHour(user);
 
-  return {
-    id_tg: user.id_tg,
-    username: user.username,
-    level: user.level,
-    investment_balance: user.investment_balance,
-    farm_balance: user.farm_balance,
-    clicks_today: user.clicks_today,
-    clicks_today_reset_at: user.clicks_today_reset_at,
-  };
+  return user;
 });

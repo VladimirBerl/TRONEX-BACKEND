@@ -1,6 +1,6 @@
 import { H3Event } from 'h3';
 
-type TokenErrorType = 'bad-request' | 'not-found';
+type TokenErrorType = 'bad-request' | 'not-found' | 'not-found-user';
 
 interface ApiErrorResponse {
   detail: string;
@@ -16,6 +16,11 @@ const errorDetails: Record<TokenErrorType, { status: number; message: string; de
     status: 404,
     message: 'Not found',
     detail: 'Resource not found',
+  },
+  'not-found-user': {
+    status: 404,
+    message: 'Not found',
+    detail: 'User not found',
   },
 };
 
