@@ -1,7 +1,7 @@
 import { models } from '~/db';
 import { isSameDay } from 'date-fns';
 
-const DAILY_CLICKS_LIMIT = 50;
+const DAILY_CLICKS_LIMIT = 1000;
 const PRICE_PER_CLICK = 0.01;
 
 type RequestBody = {
@@ -32,20 +32,6 @@ export default defineEventHandler(async (event) => {
     });
     await user.save();
   }
-
-  // const now = new Date();
-  // const lastReset = user.clicks_today_reset_at;
-
-  // const diffMs = now.getTime() - lastReset.getTime(); // разница в миллисекундах
-  // const diffMinutes = diffMs / (1000 * 60); // разница в минутах
-
-  // if (diffMinutes >= 1) {
-  //   user.set({
-  //     clicks_today: 0,
-  //     clicks_today_reset_at: now,
-  //   });
-  //   await user.save();
-  // }
 
   const clicksToday = user.clicks_today || 0;
   const farmBalance = parseFloat(user.farm_balance);
