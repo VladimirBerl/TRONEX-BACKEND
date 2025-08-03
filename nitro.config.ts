@@ -4,5 +4,6 @@ export default defineNitroConfig({
   runtimeConfig: {
     databaseUrl: 'NITRO_DATABASE_URL',
     jwtSecret: 'NITRO_JWT_SECRET',
+    botToken: 'NITRO_BOT_TOKEN',
   },
 });

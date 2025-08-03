@@ -17,6 +17,7 @@ export default (sequelize: Sequelize, DataTypes) => {
     declare id_tg: string;
     declare username: string;
     declare investment_balance: string;
+    declare status: string;
     declare farm_balance: string;
     declare farm_balance_reset_at: Date;
     declare level: number;
@@ -36,6 +37,11 @@ export default (sequelize: Sequelize, DataTypes) => {
       },
       username: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      status: {
+        type: DataTypes.STRING,
+        defaultValue: 'active',
         allowNull: false,
       },
       investment_balance: {
