@@ -1,7 +1,12 @@
-import { models } from "~/db";
+import { models } from '~/db';
+
+type RequestBody = {
+  status: 'pending' | 'paid' | 'rejected';
+};
 
 export default defineEventHandler(async (event) => {
-  const { id, status } = await readBody(event);
+  const id = getRouterParam(event, 'id');
+  const { status } = await readBody(event);
 
   if (!id || !status) {
     return useApiError(event, 'bad-request');
@@ -13,6 +18,10 @@ export default defineEventHandler(async (event) => {
 
   const withdrawal = await models.Withdrawal.findByPk(id);
   if (!withdrawal) return useApiError(event, 'not-found');
+
+  if (withdrawal.status === 'paid' || withdrawal.status === 'rejected') {
+    return useApiError(event, 'bad-request', { detail: 'Withdrawal already processed' });
+  }
 
   withdrawal.status = status;
   await withdrawal.save();
