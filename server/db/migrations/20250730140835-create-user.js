@@ -20,7 +20,7 @@ module.exports = {
       investment_balance: {
         type: Sequelize.DECIMAL(30, 18),
         allowNull: false,
-        defaultValue: 1.0,
+        defaultValue: 0.3,
       },
       farm_balance: {
         type: Sequelize.DECIMAL(30, 18),

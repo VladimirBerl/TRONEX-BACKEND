@@ -14,5 +14,10 @@ export default defineEventHandler(async (event) => {
     return useApiError(event, 'bad-request');
   }
   const task = await models.Task.create({ title, reward, url, imageFileId, imageUrl });
+  const allUsers = await models.User.findAll();
+
+  for (const user of allUsers) {
+    await models.UserTask.create({ id_tg: user.id_tg, task_id: task.id });
+  }
   return task;
 });

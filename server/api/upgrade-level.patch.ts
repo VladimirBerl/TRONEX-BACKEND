@@ -1,6 +1,6 @@
 import { models } from '~/db';
 
-const BONUS_INVESTMENT_BALANCE = 1.0;
+const BONUS_INVESTMENT_BALANCE = 0.3;
 
 type RequestBody = {
   id_tg: string;

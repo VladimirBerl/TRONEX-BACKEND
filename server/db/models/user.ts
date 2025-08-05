@@ -25,7 +25,9 @@ export default (sequelize: Sequelize, DataTypes) => {
     declare clicks_today_reset_at: Date;
     declare bonus_locked: boolean;
 
-    static associate(models) {}
+    static associate(models) {
+      this.hasMany(models.UserTask, { foreignKey: 'id_tg', sourceKey: 'id_tg' });
+    }
   }
 
   User.init(

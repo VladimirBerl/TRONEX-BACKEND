@@ -12,8 +12,7 @@ export const updataFarmBalanceOneHour = async (user: UserInstance): Promise<bool
   const now = new Date();
   const lastReset = user.farm_balance_reset_at;
 
-  const diffMinutes = Math.floor((now.getTime() - lastReset.getTime()) / (1000 * 60));
-  if (diffMinutes < 1) return false;
+  if (isSameDay(now, lastReset)) return;
 
   const investmentBalance = parseFloat(user.investment_balance || '0');
   const farmBalance = parseFloat(user.farm_balance || '0');

@@ -9,6 +9,10 @@ export default (sequelize: Sequelize, DataTypes) => {
     declare url: string;
     declare imageFileId: string;
     declare imageUrl: string;
+
+    static associate(models) {
+      this.hasMany(models.UserTask, { foreignKey: 'task_id', sourceKey: 'id' });
+    }
   }
 
   Task.init(
