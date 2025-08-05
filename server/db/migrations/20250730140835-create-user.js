@@ -12,6 +12,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      status: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        defaultValue: 'active',
+      },
       investment_balance: {
         type: Sequelize.DECIMAL(30, 18),
         allowNull: false,

@@ -1,0 +1,11 @@
+import { models } from '~/db';
+
+export default defineEventHandler(async (event) => {
+  const id = getRouterParam(event, 'id');
+  if (!id) return useApiError(event, 'bad-request');
+
+  const task = await models.Task.findByPk(id);
+  if (!task) return useApiError(event, 'not-found');
+  
+  return task;
+});
