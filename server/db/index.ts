@@ -5,6 +5,7 @@ import defineLevelModel from './models/level';
 import defineWithdrawalModel from './models/withdrawal';
 import defineTaskModel from './models/task';
 import defineUserTaskModel from './models/user-task';
+import defineReferralModel from './models/referrals';
 
 const sequelize = new Sequelize(process.env.NITRO_DATABASE_URL, {
   dialect: 'postgres',
@@ -26,6 +27,7 @@ const models = {
   Withdrawal: defineWithdrawalModel(sequelize, DataTypes),
   Task: defineTaskModel(sequelize, DataTypes),
   UserTask: defineUserTaskModel(sequelize, DataTypes),
+  Referral: defineReferralModel(sequelize, DataTypes),
 };
 
 Object.values(models).forEach((model: any) => {
@@ -33,6 +35,5 @@ Object.values(models).forEach((model: any) => {
     model.associate(models);
   }
 });
-
 
 export { db, models };

@@ -4,13 +4,30 @@ export default defineEventHandler(async (event) => {
   const id_tg = getRouterParam(event, 'id');
   if (!id_tg) return useApiError(event, 'bad-request');
 
-  const user = await models.User.findByPk(id_tg);
+  const user = await models.User.findByPk(id_tg, {
+    include: [
+      {
+        model: models.Referral,
+        as: 'Referrals',
+      },
+    ],
+  });
+
   if (!user) return useApiError(event, 'not-found-user');
 
+  const all_referrals_deposit = await Promise.all(
+    user.Referrals.map(async (ref) => {
+      const invitedUser = await models.User.findByPk(ref.invited_id_tg);
+      return invitedUser ? parseFloat(invitedUser.deposit || '0') : 0;
+    })
+  )
+    .then((deposits) => deposits.reduce((sum, val) => sum + val, 0))
+    .catch(() => 0);
+
   return {
-    all_referrals: 0,
-    all_referrals_deposit: 0,
+    all_referrals: user.Referrals.length,
+    all_referrals_deposit,
     invite_link: `https://t.me/tronexapptesting_bot?start=invited_by_${id_tg}`,
-    deposit_amount: 0,
+    deposit_amount: user.deposit,
   };
 });

@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
     return useApiError(event, 'bad-request');
   }
 
-  const user = await models.User.findByPk(id_tg);
+  const user = await models.User.findByPk(String(id_tg));
 
   if (!user) {
     return useApiError(event, 'not-found-user');

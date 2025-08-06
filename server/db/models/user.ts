@@ -1,5 +1,6 @@
 'use strict';
 import { InferAttributes, InferCreationAttributes, Model, Sequelize } from 'sequelize';
+import { ReferralInstance } from './referrals';
 
 export type UserInstance = Model<InferAttributes<any>, InferCreationAttributes<any>> & {
   id_tg: string;
@@ -18,6 +19,7 @@ export default (sequelize: Sequelize, DataTypes) => {
     declare username: string;
     declare investment_balance: string;
     declare status: string;
+    declare deposit: string;
     declare farm_balance: string;
     declare farm_balance_reset_at: Date;
     declare level: number;
@@ -25,8 +27,15 @@ export default (sequelize: Sequelize, DataTypes) => {
     declare clicks_today_reset_at: Date;
     declare bonus_locked: boolean;
 
+    declare Referrals?: ReferralInstance[];
+
     static associate(models) {
       this.hasMany(models.UserTask, { foreignKey: 'id_tg', sourceKey: 'id_tg' });
+      this.hasMany(models.Referral, {
+        foreignKey: 'inviter_id_tg',
+        sourceKey: 'id_tg',
+        as: 'Referrals',
+      });
     }
   }
 
@@ -44,6 +53,11 @@ export default (sequelize: Sequelize, DataTypes) => {
       status: {
         type: DataTypes.STRING,
         defaultValue: 'active',
+        allowNull: false,
+      },
+      deposit: {
+        type: DataTypes.DECIMAL(30, 18),
+        defaultValue: 0,
         allowNull: false,
       },
       investment_balance: {

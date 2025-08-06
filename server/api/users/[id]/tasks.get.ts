@@ -8,8 +8,26 @@ export default defineEventHandler(async (event) => {
     return useApiError(event, 'bad-request');
   }
 
+  const user = await models.User.findByPk(id_tg);
+
+  if (!user) {
+    return useApiError(event, 'not-found-user');
+  }
+
   const pageNum = parseFloat(page as string);
   const limitNum = parseFloat(limit as string);
+
+  const allTasks = await models.Task.findAll();
+
+  for await (const task of allTasks) {
+    await models.UserTask.findOrCreate({
+      where: { id_tg, task_id: task.id },
+      defaults: {
+        id_tg,
+        task_id: task.id,
+      },
+    });
+  }
 
   const { rows, count } = await models.UserTask.findAndCountAll({
     where: { id_tg },

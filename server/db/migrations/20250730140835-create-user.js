@@ -17,6 +17,11 @@ module.exports = {
         allowNull: false,
         defaultValue: 'active',
       },
+      deposit: {
+        type: Sequelize.DECIMAL(30, 18),
+        defaultValue: 0,
+        allowNull: false,
+      },
       investment_balance: {
         type: Sequelize.DECIMAL(30, 18),
         allowNull: false,
