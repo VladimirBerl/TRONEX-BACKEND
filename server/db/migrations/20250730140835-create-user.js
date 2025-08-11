@@ -17,6 +17,10 @@ module.exports = {
         allowNull: false,
         defaultValue: 'active',
       },
+      wallet_address: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
       deposit: {
         type: Sequelize.DECIMAL(30, 18),
         defaultValue: 0,

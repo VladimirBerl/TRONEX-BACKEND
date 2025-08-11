@@ -6,7 +6,9 @@ export type UserInstance = Model<InferAttributes<any>, InferCreationAttributes<a
   id_tg: string;
   username: string;
   level: number;
+  status: string;
   investment_balance: string;
+  wallet_address: string | null;
   farm_balance: string;
   clicks_today: number;
   clicks_today_reset_at: Date;
@@ -19,6 +21,7 @@ export default (sequelize: Sequelize, DataTypes) => {
     declare username: string;
     declare investment_balance: string;
     declare status: string;
+    declare wallet_address: string | null;
     declare deposit: string;
     declare farm_balance: string;
     declare farm_balance_reset_at: Date;
@@ -54,6 +57,10 @@ export default (sequelize: Sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: 'active',
         allowNull: false,
+      },
+      wallet_address: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
       deposit: {
         type: DataTypes.DECIMAL(30, 18),

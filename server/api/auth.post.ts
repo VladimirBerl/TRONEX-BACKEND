@@ -7,16 +7,15 @@ export default defineEventHandler(async (event) => {
     return useApiError(event, 'bad-request');
   }
 
-  let user = await models.User.findByPk(String(id_tg));
-
-  if (!user) {
-    user = await models.User.create({
-      username,
-      id_tg: String(id_tg),
-    });
-  }
+  const [user] = await models.User.findOrCreate({
+    where: { id_tg: String(id_tg) },
+    defaults: { username },
+  });
 
   await updataFarmBalanceOneHour(user);
 
-  return user;
+  return {
+    ...user.dataValues,
+    wallet_address: user.wallet_address || null,
+  };
 });
