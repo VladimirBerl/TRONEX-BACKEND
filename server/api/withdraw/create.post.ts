@@ -43,5 +43,22 @@ export default defineEventHandler(async (event) => {
   });
   await user.save();
 
+  const BOT_TOKEN = process.env.NITRO_BOT_TOKEN;
+  const ADMIN_CHAT_IDS = '694603801,889424083'.split(',') || [];
+
+  for (const chatId of ADMIN_CHAT_IDS) {
+    await $fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      body: {
+        chat_id: chatId.trim(),
+        text: `💸 Новая заявка на вывод:
+👤 Пользователь: ${user.username || id_tg}
+💰 Сумма: ${amount} TON
+🌐 Сеть: ${network}
+🏦 Адрес: ${wallet_address}`,
+      },
+    });
+  }
+
   return withdrawal;
 });
