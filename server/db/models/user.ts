@@ -61,6 +61,7 @@ export default (sequelize: Sequelize, DataTypes) => {
       wallet_address: {
         type: DataTypes.STRING,
         allowNull: true,
+        defaultValue: null,
       },
       deposit: {
         type: DataTypes.DECIMAL(30, 18),

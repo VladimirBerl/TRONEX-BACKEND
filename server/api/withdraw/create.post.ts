@@ -1,3 +1,4 @@
+import { ADMIN_CHAT_IDS, BOT_TOKEN } from '~/const/bot';
 import { models } from '~/db';
 import { setWithdrawBalance } from '~/utils/set-withdraw-balance';
 
@@ -43,21 +44,31 @@ export default defineEventHandler(async (event) => {
   });
   await user.save();
 
-  const BOT_TOKEN = process.env.NITRO_BOT_TOKEN;
-  const ADMIN_CHAT_IDS = '694603801,889424083'.split(',') || [];
-
-  for (const chatId of ADMIN_CHAT_IDS) {
-    await $fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      body: {
-        chat_id: chatId.trim(),
-        text: `💸 Новая заявка на вывод:
-👤 Пользователь: ${user.username || id_tg}
+  const username = user.username || id_tg;
+  const messageText = `💸 Новая заявка на вывод:
+👤 Пользователь: ${username}
 💰 Сумма: ${amount} TON
 🌐 Сеть: ${network}
-🏦 Адрес: ${wallet_address}`,
-      },
-    });
+🏦 Адрес: ${wallet_address}`;
+
+  for (const chatId of ADMIN_CHAT_IDS) {
+    try {
+      await $fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: {
+          chat_id: chatId,
+          text: messageText,
+        },
+      });
+    } catch (error: any) {
+      console.error(
+        `Failed to send Telegram message to chatId ${chatId}:`,
+        error.response?.data || error.message || error
+      );
+    }
   }
 
   return withdrawal;
