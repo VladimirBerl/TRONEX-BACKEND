@@ -1,3 +1,4 @@
+import { BOT_TOKEN } from '~/const/bot';
 import { models } from '~/db';
 
 type RequestBody = {
@@ -25,6 +26,24 @@ export default defineEventHandler(async (event) => {
 
   withdrawal.status = status;
   await withdrawal.save();
+
+  if (status === 'paid' || status === 'rejected') {
+    const user = await models.User.findByPk(withdrawal.user_id_tg);
+    if (user) {
+      const message = status === 'paid' ? 'Вам одобрили вывод!✅💸' : 'Ваш вывод отклонен!❌';
+
+      await $fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: {
+          chat_id: user.id_tg,
+          text: message,
+        },
+      });
+    }
+  }
 
   return withdrawal;
 });

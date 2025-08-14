@@ -2,7 +2,7 @@ import { models } from '~/db';
 import { isSameDay } from 'date-fns';
 
 const DAILY_CLICKS_LIMIT = 1000;
-const PRICE_PER_CLICK = 0.01;
+const PRICE_PER_CLICK = 0.00001071;
 
 type RequestBody = {
   id_tg: string;

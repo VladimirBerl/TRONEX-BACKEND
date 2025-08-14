@@ -3,7 +3,8 @@ import { models } from '~/db';
 import { setWithdrawBalance } from '~/utils/set-withdraw-balance';
 
 export default defineEventHandler(async (event) => {
-  const { id_tg, network, wallet_address, amount } = await readBody(event);
+  const id_tg = getRouterParam(event, 'id');
+  const { network, wallet_address, amount } = await readBody(event);
 
   if (!id_tg || !network || !wallet_address || !amount) {
     return useApiError(event, 'bad-request');

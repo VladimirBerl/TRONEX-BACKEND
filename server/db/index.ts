@@ -6,6 +6,7 @@ import defineWithdrawalModel from './models/withdrawal';
 import defineTaskModel from './models/task';
 import defineUserTaskModel from './models/user-task';
 import defineReferralModel from './models/referrals';
+import defineDepositModel from './models/deposit';
 
 const sequelize = new Sequelize(process.env.NITRO_DATABASE_URL, {
   dialect: 'postgres',
@@ -28,6 +29,7 @@ const models = {
   Task: defineTaskModel(sequelize, DataTypes),
   UserTask: defineUserTaskModel(sequelize, DataTypes),
   Referral: defineReferralModel(sequelize, DataTypes),
+  Deposit: defineDepositModel(sequelize, DataTypes),
 };
 
 Object.values(models).forEach((model: any) => {
