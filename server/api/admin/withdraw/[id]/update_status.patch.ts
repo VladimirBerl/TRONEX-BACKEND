@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
 👤 User: ${user.username}
 💰 Amount: ${parseFloat(withdrawal.amount).toFixed(2)} ${withdrawal.network}
 🌐 Txid: <code>${withdrawal.hash}</code>`;
-        sendTelegramMessageImageAndButtons(CHANNEL_CHAT_ID, messageChannelChat);
+        sendTelegramMessageImageAndButtons(CHANNEL_CHAT_ID, messageChannelChat, 'ton-banner.jpg');
       }
     }
   }

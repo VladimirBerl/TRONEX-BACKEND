@@ -18,14 +18,18 @@ export async function sendTelegramMessage(chatId: number | string, text: string)
   }
 }
 
-export async function sendTelegramMessageImageAndButtons(chatId: number | string, text: string) {
+export async function sendTelegramMessageImageAndButtons(
+  chatId: number | string,
+  text: string,
+  imageUrl: string
+) {
   try {
     await $fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: {
         chat_id: chatId,
-        photo: `${DOMAIN_URL}/ton-banner.jpg`,
+        photo: `${DOMAIN_URL}/${imageUrl}`,
         caption: text,
         parse_mode: 'HTML',
         reply_markup: {

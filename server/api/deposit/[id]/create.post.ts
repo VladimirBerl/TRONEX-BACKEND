@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
 🏦 Txid: <code>${wallet_address}</code>`;
 
   await sendTelegramMessageAllAdmin(messageTextAdmin);
-  await sendTelegramMessageImageAndButtons(CHANNEL_CHAT_ID, messageTextChannel);
+  await sendTelegramMessageImageAndButtons(CHANNEL_CHAT_ID, messageTextChannel, "payout-successful.jpg");
 
   return await user.save();
 });
