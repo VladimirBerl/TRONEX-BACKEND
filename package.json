@@ -1,7 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "bot:start": "node ./server/bot/index.ts",
     "build": "nitro build",
     "dev": "nitro dev",
     "prepare": "nitro prepare",

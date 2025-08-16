@@ -2,8 +2,8 @@ export default defineNitroConfig({
   srcDir: 'server',
   compatibilityDate: '2025-07-26',
   runtimeConfig: {
-    databaseUrl: 'NITRO_DATABASE_URL',
-    jwtSecret: 'NITRO_JWT_SECRET',
-    botToken: 'NITRO_BOT_TOKEN',
+    databaseUrl: 'DATABASE_URL',
+    jwtSecret: 'JWT_SECRET',
+    botToken: 'BOT_TOKEN',
   },
 });

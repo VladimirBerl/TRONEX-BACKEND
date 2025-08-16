@@ -6,6 +6,7 @@ export type DepositInstance = Model<InferAttributes<any>, InferCreationAttribute
   amount: string;
   network: string;
   wallet_address: string;
+  hash: string | null;
 };
 
 export default (sequelize: Sequelize, DataTypes) => {
@@ -15,6 +16,7 @@ export default (sequelize: Sequelize, DataTypes) => {
     declare amount: string;
     declare network: string;
     declare wallet_address: string;
+    declare hash: string | null;
 
     static associate(models) {
       // Возможные связи, если надо
@@ -39,6 +41,11 @@ export default (sequelize: Sequelize, DataTypes) => {
       network: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      hash: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
       },
       wallet_address: {
         type: DataTypes.STRING,

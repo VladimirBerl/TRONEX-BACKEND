@@ -1,9 +1,15 @@
-import { ADMIN_CHAT_IDS, BOT_TOKEN } from '~/const/bot';
+import { CHANNEL_CHAT_ID } from '~/const/bot';
 import { models } from '~/db';
 
+type RequestBody = {
+  amount: string;
+  wallet_address: string;
+  network: string;
+};
+
 export default defineEventHandler(async (event) => {
-   const id_tg = getRouterParam(event, 'id');
-  const { network, wallet_address, amount } = await readBody(event);
+  const id_tg = getRouterParam(event, 'id');
+  const { network, wallet_address, amount } = await readBody<RequestBody>(event);
 
   if (!id_tg || !amount || !network || !wallet_address) {
     return useApiError(event, 'bad-request');
@@ -23,31 +29,20 @@ export default defineEventHandler(async (event) => {
   user.set({ investment_balance: parseFloat(user.investment_balance || '0') + parseFloat(amount) });
 
   const username = user.username || id_tg;
-  const messageText = `💸 Новое пополнение:
-  👤 Пользователь: ${username}
-  💰 Сумма: ${amount} TON
-  🌐 Сеть: ${network}
-  🏦 Адрес: ${wallet_address}`;
+  const messageTextAdmin = `💸 Новое пополнение:
+👤 Пользователь: ${username}
+💰 Сумма: ${parseFloat(amount).toFixed(2)} TON
+🌐 Сеть: ${network}
+🏦 Адрес: ${wallet_address}`;
 
-  for (const chatId of ADMIN_CHAT_IDS) {
-    try {
-      await $fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: {
-          chat_id: chatId,
-          text: messageText,
-        },
-      });
-    } catch (error: any) {
-      console.error(
-        `Failed to send Telegram message to chatId ${chatId}:`,
-        error.response?.data || error.message || error
-      );
-    }
-  }
+  const messageTextChannel = `✅ Successful payout ✅
+
+👤 User: ${username}
+💰 Amount: ${amount} TON 
+🏦 Txid: <code>${wallet_address}</code>`;
+
+  await sendTelegramMessageAllAdmin(messageTextAdmin);
+  await sendTelegramMessageImageAndButtons(CHANNEL_CHAT_ID, messageTextChannel);
 
   return await user.save();
 });

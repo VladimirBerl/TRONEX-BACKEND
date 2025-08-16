@@ -17,6 +17,11 @@ module.exports = {
         type: Sequelize.DECIMAL(30, 18),
         allowNull: false,
       },
+      hash: {
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
       network: {
         type: Sequelize.STRING,
         allowNull: false,

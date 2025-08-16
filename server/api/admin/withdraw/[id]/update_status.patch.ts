@@ -1,9 +1,5 @@
-import { BOT_TOKEN } from '~/const/bot';
+import { CHANNEL_CHAT_ID } from '~/const/bot';
 import { models } from '~/db';
-
-type RequestBody = {
-  status: 'pending' | 'paid' | 'rejected';
-};
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id');
@@ -24,24 +20,27 @@ export default defineEventHandler(async (event) => {
     return useApiError(event, 'bad-request', { detail: 'Withdrawal already processed' });
   }
 
+  const user = await models.User.findByPk(withdrawal.user_id_tg);
+  if (!user) return useApiError(event, 'not-found-user');
+
   withdrawal.status = status;
   await withdrawal.save();
 
   if (status === 'paid' || status === 'rejected') {
+    const isPaid = status === 'paid';
     const user = await models.User.findByPk(withdrawal.user_id_tg);
     if (user) {
-      const message = status === 'paid' ? 'Вам одобрили вывод!✅💸' : 'Ваш вывод отклонен!❌';
+      const message = isPaid ? 'Вам одобрили вывод!✅💸' : 'Ваш вывод отклонен!❌';
+      const messageChannelChat = `🚀 New withdrawal of funds 🚀
 
-      await $fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: {
-          chat_id: user.id_tg,
-          text: message,
-        },
-      });
+👤 User: ${user.username}
+💰 Amount: ${parseFloat(withdrawal.amount).toFixed(2)} ${withdrawal.network}
+🌐 Txid: <code>${withdrawal.wallet_address}</code>`;
+
+      await sendTelegramMessage(user.id_tg, message);
+      if (isPaid) {
+        sendTelegramMessageImageAndButtons(CHANNEL_CHAT_ID, messageChannelChat);
+      }
     }
   }
 

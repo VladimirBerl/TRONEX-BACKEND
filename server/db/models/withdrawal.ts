@@ -8,6 +8,7 @@ export default (sequelize: Sequelize, DataTypes) => {
     declare network: string;
     declare wallet_address: string;
     declare status: 'pending' | 'paid' | 'rejected';
+    declare hash: string | null;
 
     static associate(models) {
       // Возможные связи, если надо
@@ -32,6 +33,11 @@ export default (sequelize: Sequelize, DataTypes) => {
       network: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      hash: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
       },
       wallet_address: {
         type: DataTypes.STRING,
