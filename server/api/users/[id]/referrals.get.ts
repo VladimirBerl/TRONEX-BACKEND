@@ -1,3 +1,4 @@
+import { BOT_INVITE_LINK } from '~/const/bot';
 import { models } from '~/db';
 
 export default defineEventHandler(async (event) => {
@@ -27,7 +28,7 @@ export default defineEventHandler(async (event) => {
   return {
     all_referrals: user.Referrals.length,
     all_referrals_deposit,
-    invite_link: `https://t.me/tronexapptesting_bot?start=invited_by_${id_tg}`,
+    invite_link: BOT_INVITE_LINK + id_tg,
     deposit_amount: user.deposit,
   };
 });

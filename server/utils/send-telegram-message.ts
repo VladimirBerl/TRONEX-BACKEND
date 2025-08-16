@@ -1,4 +1,4 @@
-import { ADMIN_CHAT_IDS, BOT_TOKEN, MAIN_CHANNEL_LINK, MINI_APP_LINK } from '~/const/bot';
+import { ADMIN_CHAT_IDS, BOT_TOKEN, DOMAIN_URL, MAIN_CHANNEL_LINK, MINI_APP_LINK } from '~/const/bot';
 
 export async function sendTelegramMessage(chatId: number | string, text: string) {
   try {
@@ -19,15 +19,13 @@ export async function sendTelegramMessage(chatId: number | string, text: string)
 }
 
 export async function sendTelegramMessageImageAndButtons(chatId: number | string, text: string) {
-  const image = await useStorage('assets:server').getItem(`ton-banner.jpg`);
-
   try {
     await $fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: {
         chat_id: chatId,
-        photo: 'https://sequentially-titillated-cephalopod.cloudpub.ru//ton-banner.jpg',
+        photo: `${DOMAIN_URL}/ton-banner.jpg`,
         caption: text,
         parse_mode: 'HTML',
         reply_markup: {

@@ -1,6 +1,5 @@
 import { ADMIN_CHAT_IDS, BOT_TOKEN } from '~/const/bot';
 import { models } from '~/db';
-import { setWithdrawBalance } from '~/utils/set-withdraw-balance';
 
 export default defineEventHandler(async (event) => {
   const id_tg = getRouterParam(event, 'id');

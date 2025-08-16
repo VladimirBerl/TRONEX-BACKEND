@@ -5,13 +5,14 @@ type RequestBody = {
   amount: string;
   wallet_address: string;
   network: string;
+  hash: string;
 };
 
 export default defineEventHandler(async (event) => {
   const id_tg = getRouterParam(event, 'id');
-  const { network, wallet_address, amount } = await readBody<RequestBody>(event);
+  const { network, wallet_address, amount, hash } = await readBody<RequestBody>(event);
 
-  if (!id_tg || !amount || !network || !wallet_address) {
+  if (!id_tg || !amount || !network || !wallet_address || !hash) {
     return useApiError(event, 'bad-request');
   }
 
@@ -24,6 +25,7 @@ export default defineEventHandler(async (event) => {
     network,
     wallet_address,
     amount,
+    hash,
   });
 
   user.set({ investment_balance: parseFloat(user.investment_balance || '0') + parseFloat(amount) });
@@ -33,7 +35,8 @@ export default defineEventHandler(async (event) => {
 👤 Пользователь: ${username}
 💰 Сумма: ${parseFloat(amount).toFixed(2)} TON
 🌐 Сеть: ${network}
-🏦 Адрес: ${wallet_address}`;
+🏦 Адрес: <code>${wallet_address}</code>
+📝 Txid: <code>${hash}</code>`;
 
   const messageTextChannel = `✅ Successful payout ✅
 

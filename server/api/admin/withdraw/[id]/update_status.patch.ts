@@ -3,7 +3,7 @@ import { models } from '~/db';
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id');
-  const { status } = await readBody(event);
+  const { status, hash } = await readBody(event);
 
   if (!id || !status) {
     return useApiError(event, 'bad-request');
@@ -23,22 +23,26 @@ export default defineEventHandler(async (event) => {
   const user = await models.User.findByPk(withdrawal.user_id_tg);
   if (!user) return useApiError(event, 'not-found-user');
 
+  const isPaid = status === 'paid';
+
+  if (hash) {
+    withdrawal.hash = hash;
+  }
   withdrawal.status = status;
   await withdrawal.save();
 
   if (status === 'paid' || status === 'rejected') {
-    const isPaid = status === 'paid';
     const user = await models.User.findByPk(withdrawal.user_id_tg);
     if (user) {
-      const message = isPaid ? 'Вам одобрили вывод!✅💸' : 'Ваш вывод отклонен!❌';
-      const messageChannelChat = `🚀 New withdrawal of funds 🚀
-
-👤 User: ${user.username}
-💰 Amount: ${parseFloat(withdrawal.amount).toFixed(2)} ${withdrawal.network}
-🌐 Txid: <code>${withdrawal.wallet_address}</code>`;
+      const message = isPaid ? 'Your withdrawal has been approved!✅💸' : 'Your withdrawal is rejected!❌';
 
       await sendTelegramMessage(user.id_tg, message);
       if (isPaid) {
+        const messageChannelChat = `🚀 New withdrawal of funds 🚀
+
+👤 User: ${user.username}
+💰 Amount: ${parseFloat(withdrawal.amount).toFixed(2)} ${withdrawal.network}
+🌐 Txid: <code>${withdrawal.hash}</code>`;
         sendTelegramMessageImageAndButtons(CHANNEL_CHAT_ID, messageChannelChat);
       }
     }
