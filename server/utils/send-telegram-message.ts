@@ -34,8 +34,8 @@ export async function sendTelegramMessageImageAndButtons(
         parse_mode: 'HTML',
         reply_markup: {
           inline_keyboard: [
-            [{ text: '🚀 Открыть мини-приложение', url: MINI_APP_LINK }],
-            [{ text: '📢 Наш канал', url: MAIN_CHANNEL_LINK }],
+            [{ text: '🚀 Start App', url: MINI_APP_LINK }],
+            [{ text: '📢 Join community!', url: MAIN_CHANNEL_LINK }],
           ],
         },
       },
