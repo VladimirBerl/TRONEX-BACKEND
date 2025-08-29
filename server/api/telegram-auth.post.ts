@@ -18,16 +18,12 @@ export default defineEventHandler(async (event) => {
 
   const userData = parse(initDataRaw);
 
-  let user = await models.User.findOne({ where: { tg_id: userData.id } });
+  const [user] = await models.User.findOrCreate({
+    where: { id_tg: String(userData.user.id) },
+    defaults: { username: userData.user.username ?? String(userData.user.id) },
+  });
 
-  if (!user) {
-    user = await models.User.create({
-      first_name: userData.first_name,
-      last_name: userData.last_name,
-      user_name: userData.username,
-      tg_id: userData.id,
-    });
-  }
+  await updataFarmBalanceOneHour(user);
 
   const token = jwt.sign(
     { id: user.getDataValue('id'), tg_id: userData.id, username: userData.username },

@@ -1,4 +1,5 @@
 export default defineNitroConfig({
+  preset: 'node-server',
   srcDir: 'server',
   compatibilityDate: '2025-07-26',
   runtimeConfig: {

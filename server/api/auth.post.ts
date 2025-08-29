@@ -1,21 +1,39 @@
 import { models } from '~/db';
+import jwt from 'jsonwebtoken';
+import { parse, isValid } from '@telegram-apps/init-data-node';
+import { BOT_TOKEN } from '~/const/bot';
+
+type requestBody = {
+  initDataRaw: string | undefined;
+};
 
 export default defineEventHandler(async (event) => {
-  const { username, id_tg } = await readBody(event);
+  const { initDataRaw }: requestBody = await readBody(event);
 
-  if (!username || !id_tg) {
-    return useApiError(event, 'bad-request');
+  
+
+  const { jwtSecret } = useRuntimeConfig(event);
+  const isInitDataValid = isValid(initDataRaw, BOT_TOKEN);
+  if (!isInitDataValid) {
+    throw createError({ statusCode: 403, message: 'Invalid Telegram data' });
   }
 
+  const userData = parse(initDataRaw);
+
   const [user] = await models.User.findOrCreate({
-    where: { id_tg: String(id_tg) },
-    defaults: { username },
+    where: { id_tg: String(userData.user.id) },
+    defaults: { username: userData.user.username ?? String(userData.user.id) },
   });
 
   await updataFarmBalanceOneHour(user);
 
-  return {
-    ...user.dataValues,
-    wallet_address: user.wallet_address || null,
-  };
+  const token = jwt.sign(
+    { id: user.getDataValue('id'), tg_id: userData.id, username: userData.username },
+    jwtSecret,
+    {
+      expiresIn: '7d',
+    }
+  );
+
+  return { status: 'success', token, user };
 });
