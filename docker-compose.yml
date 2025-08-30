@@ -1,0 +1,15 @@
+version: '3.9'
+
+services:
+  nitro-app:
+    build: .
+    container_name: nitro-app
+    restart: always
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: production
+      NITRO_DATABASE_URL: postgresql://gen_user:3z9&(k@)PZ{Pax@147.45.235.204:5432/default_db
+      NITRO_BOT_TOKEN: 8211177350:AAEdN4pgi3D_uRLH_1Nh-1B0x5xP3L2AouY
+      NITRO_ADMIN_CHAT_IDS: 694603801,889424083,8194031427,6838416438
+      NITRO_JWT_SECRET: supersecret
